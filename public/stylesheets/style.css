@@ -6,3 +6,26 @@ body {
 a {
   color: #00B7FF;
 }
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin: 5px 0;
+}
+
+input {
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 5px 10px;
+}
+
