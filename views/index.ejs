@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<head>
+  <title>Games List</title>
+</head>
+<body>
+  <h1>Games List</h1>
+  <ul>
+    <% games.forEach(game => { %>
+      <li><%= game.title %> - Released on <%= game.release_date %></li>
+    <% }) %>
+  </ul>
+</body>
 </html>
+
