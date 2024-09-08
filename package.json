@@ -14,11 +14,16 @@
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
+    "express-async-handler": "^1.2.0",
+    "express-body-validator": "^1.0.5",
+    "express-validator": "^7.2.0",
     "http-errors": "~1.6.3",
+    "knex": "^3.1.0",
     "morgan": "~1.9.1",
     "pg": "^8.12.0",
     "postcss": "^8.4.45",
     "postcss-cli": "^11.0.0",
+    "sqlite3": "^5.1.7",
     "tailwindcss": "^3.4.10"
   },
   "devDependencies": {
