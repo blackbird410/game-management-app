@@ -1,9 +1,10 @@
 // models/game.js
+require('dotenv').config();
 
-// Import Knex configuration
-const knex = require('knex')(require('../knexfile').development); // Adjust as needed for your environment
+const environment = process.env.NODE_ENV || 'development';
+const knexConfig = require('../knexfile')[environment];
+const knex = require('knex')(knexConfig);
 
-// Function to get all games from the database
 const getAllGames = async () => {
   try {
     return await knex('games').select('*');
@@ -16,7 +17,6 @@ const getAllGames = async () => {
 // Function to add a new game to the database
 const addGame = async (game) => {
   try {
-    // Ensure the game object has the required fields before inserting
     if (!game.title || !game.genre || !game.release_date) {
       throw new Error('Game object is missing required fields');
     }
