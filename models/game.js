@@ -17,7 +17,7 @@ const getAllGames = async () => {
 // Function to add a new game to the database
 const addGame = async (game) => {
   try {
-    if (!game.title || !game.genre || !game.release_date) {
+    if (!game.title || !game.genre || !game.release_date || !game.description) {
       throw new Error('Game object is missing required fields');
     }
     return await knex('games').insert(game);
