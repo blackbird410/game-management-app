@@ -11,6 +11,15 @@ const {
 } = require('../models/game');
 
 const { 
+  getAllGenres,
+  getGenreById,
+  getGenreByName,
+  addGenre,
+  updateGenreById,
+  deleteGenreById,
+} = require('../models/genre');
+
+const { 
   addImageToBucket, 
   getImageSignedUrl, 
   deleteImage 
@@ -41,9 +50,13 @@ const renderIndex = async (req, res) => {
 // Render the page for adding a new game
 const addGameGet = async (req, res) => {
   try {
+    const allGenres = await getAllGenres();
+
     res.render('form_game', { 
       title: 'Add New Game',
-      game: null });
+      genres: allGenres,
+      game: null 
+    });
   } catch (error) {
     console.error('Error fetching games for add game page:', error);
     res.status(500).send('Internal Server Error');
