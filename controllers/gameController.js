@@ -69,14 +69,15 @@ const addGamePost = [
   upload.single('image'),
   body('title').isString().trim().notEmpty().withMessage('Title is required'),
   body('description').isString().trim().notEmpty().withMessage('Description is required'),
-  body('genre').isString().trim().notEmpty().withMessage('Genre is required'),
+  body('genre_id').isInt().withMessage('Genre ID must be an integer'),
   body('release_date').isDate().withMessage('Release date must be a valid date'),
   
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).render('form_game', { 
-        errors: errors.array() 
+        errors: errors.array(),
+        game: req.body
       });
     }
 
@@ -100,8 +101,9 @@ const editGameGet = async (req, res) => {
     if (!game) {
       return res.status(404).send('Game not found');
     }
+    const genres = await getAllGenres();
 
-    res.render('form_game', { game });
+    res.render('form_game', { game, genres });
   } catch (error) {
     console.error('Error fetching game for edit page:', error);
     res.status(500).send('Internal Server Error');
@@ -113,14 +115,15 @@ const editGamePost = [
   upload.single('image'),
   body('title').isString().trim().notEmpty().withMessage('Title is required'),
   body('description').isString().trim().notEmpty().withMessage('Description is required'),
-  body('genre').isString().trim().notEmpty().withMessage('Genre is required'),
+  body('genre_id').isInt().withMessage('Genre ID must be an integer'),
   body('release_date').isDate().withMessage('Release date must be a valid date'),
   
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).render('edit_game', { 
-        errors: errors.array() 
+      return res.status(400).render('form_game', { 
+        errors: errors.array(),
+        game: req.body  
       });
     }
 
