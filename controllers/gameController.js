@@ -28,7 +28,10 @@ const renderIndex = async (req, res) => {
       game.image_url = getImageSignedUrl(game.image_key);
     }
 
-    res.render('index', { games });
+    res.render('game_collection', {
+      title: "Game Collection",
+      games: games
+    });
   } catch (error) {
     console.error('Error fetching games:', error);
     res.status(500).send('Internal Server Error');

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title || 'Default Title' %></title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="/stylesheets/main.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div class="burger-icon" id="burgerIcon">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <div class="sidebar" id="sidebar">
+    <h2>Dashboard</h2>
+    <ul>
+      <li><a href="/home">Home</a></li>
+      <li><a href="/profile">Profile</a></li>
+      <li><a href="/settings">Settings</a></li>
+      <!-- Add more links as needed -->
+    </ul>
+  </div>
+  <div class="content" id="content">
+    <!-- This is where the page content should be rendered -->
+    <%- body %>
+  </div>
+  <script>
+    document.getElementById('burgerIcon').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('active');
+      document.getElementById('content').classList.toggle('expanded');
+      this.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
+
