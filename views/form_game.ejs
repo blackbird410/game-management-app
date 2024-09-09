@@ -15,7 +15,6 @@
         <label for="release_date" class="block text-sm font-medium text-gray-700">Release Date:</label>
         <input type="date" id="release_date" name="release_date" value="<%= game ? game.release_date : '' %>" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
       </div>
-
       
       <!-- Genre Field -->
       <div>
@@ -25,6 +24,19 @@
           <% genres.forEach(function(genre) { %>
             <option value="<%= genre.id %>" <%= (game && game.genre_id === genre.id) ? 'selected' : '' %>>
               <%= genre.name %>
+            </option>
+          <% }); %>
+        </select>
+      </div>
+
+      <!-- Developer Field -->
+      <div>
+        <label for="developer" class="block text-sm font-medium text-gray-700">Developer:</label>
+        <select id="developer" name="developer_id" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+          <option value="" disabled selected>Select a developer</option>
+          <% developers.forEach(function(developer) { %>
+            <option value="<%= developer.id %>" <%= (game && game.developer_id === developer.id) ? 'selected' : '' %>>
+              <%= developer.name %>
             </option>
           <% }); %>
         </select>
