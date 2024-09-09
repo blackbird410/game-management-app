@@ -1,38 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= game ? "Edit Game" : "Add Game" %></title>
-  <link rel="stylesheet" href="/stylesheets/main.css">
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f3f4f6; /* Tailwind's bg-gray-100 */
-    }
-    .form-container {
-      max-width: 600px; /* Adjust as needed */
-      width: 100%;
-      padding: 2rem;
-      background: #ffffff;
-      border-radius: 0.5rem;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-  </style>
-</head>
-<body>
-  <div class="form-container">
-    <h1 class="text-2xl font-bold mb-4"><%= game ? "Edit Game" : "Add a New Game" %></h1>
+
+<div class="container mx-auto p-6 text-gray-900">
+  <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-4 text-center"><%= game ? 'Edit Game' : 'Add a New Game' %></h1>
     <form action="<%= game ? `/edit-game/${game.id}` : '/add-game' %>" method="POST" class="space-y-4" enctype="multipart/form-data">
-      
+
       <!-- Title Field -->
       <div>
         <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
@@ -66,11 +37,10 @@
       <!-- Submit Button -->
       <div>
         <button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 w-full">
-          <%= game ? "Update Game" : "Add Game" %>
+          <%= game ? 'Update Game' : 'Add Game' %>
         </button>
       </div>
     </form>
   </div>
-</body>
-</html>
+</div>
 

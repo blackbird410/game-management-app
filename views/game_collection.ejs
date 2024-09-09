@@ -1,0 +1,24 @@
+
+<h1 class="text-4xl font-bold text-center mb-4">Game Collection</h1>
+<p class="text-center text-gray-600 mb-4">Browse and manage your game collection with ease.</p>
+
+<main>
+  <div class="grid gap-6 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+    <% games.forEach(game => { %>
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <img src="<%= game.image_url %>" alt="<%= game.title %>" class="w-full h-48 object-cover">
+        <div class="p-6">
+          <h2 class="text-xl font-semibold mb-2"><%= game.title %></h2>
+          <p class="text-gray-600 mb-4"><strong>Release Date:</strong> <%= game.release_date %></p>
+          <p class="text-gray-600 mb-4"><strong>Genre:</strong> <%= game.genre %></p>
+          <p class="text-gray-600 mb-4"><strong>Description:</strong> <%= game.description %></p>
+          <div class="flex justify-between items-center">
+            <a href="/edit-game/<%= game.id %>" class="text-indigo-600 hover:underline">Edit</a>
+            <a href="/delete-game/<%= game.id %>" class="text-red-600 hover:underline">Delete</a>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</main>
+

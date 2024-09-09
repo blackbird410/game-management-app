@@ -29,3 +29,79 @@ button {
   padding: 5px 10px;
 }
 
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #2d3436;
+  color: #fff;
+  padding: 20px;
+  padding-top: 4rem;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  transform: translateX(-100%);
+  z-index: 1000;
+}
+.sidebar.active {
+  transform: translateX(0);
+}
+.sidebar h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar ul li {
+  margin: 15px 0;
+}
+.sidebar ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2em;
+  transition: color 0.3s ease;
+}
+.sidebar ul li a:hover {
+  color: #55efc4;
+}
+.content {
+  flex: 1;
+  margin-left: 0;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+}
+.content.expanded {
+  margin-left: 250px;
+}
+.burger-icon {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+  z-index: 1100;
+}
+.burger-icon div {
+  width: 30px;
+  height: 3px;
+  background: #333;
+  margin: 6px 0;
+  transition: 0.3s;
+}
+
+#burgerIcon.active > div {
+  background: #fff;
+}
+
+.burger-icon.active div:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 6px);
+}
+.burger-icon.active div:nth-child(2) {
+  opacity: 0;
+}
+.burger-icon.active div:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -6px);
+}
