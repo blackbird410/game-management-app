@@ -11,6 +11,15 @@ const {
 } = require('../models/game');
 
 const { 
+  getAllGenres,
+  getGenreById,
+  getGenreByName,
+  addGenre,
+  updateGenreById,
+  deleteGenreById,
+} = require('../models/genre');
+
+const { 
   addImageToBucket, 
   getImageSignedUrl, 
   deleteImage 
@@ -23,6 +32,7 @@ const upload = multer({ storage });
 const renderIndex = async (req, res) => {
   try {
     const games = await getAllGames();
+    const genres = await getAllGenres();
 
     for (const game of games) {
       game.image_url = getImageSignedUrl(game.image_key);
@@ -30,7 +40,8 @@ const renderIndex = async (req, res) => {
 
     res.render('game_collection', {
       title: "Game Collection",
-      games: games
+      games: games,
+      genres: genres
     });
   } catch (error) {
     console.error('Error fetching games:', error);
@@ -41,9 +52,13 @@ const renderIndex = async (req, res) => {
 // Render the page for adding a new game
 const addGameGet = async (req, res) => {
   try {
+    const allGenres = await getAllGenres();
+
     res.render('form_game', { 
       title: 'Add New Game',
-      game: null });
+      genres: allGenres,
+      game: null 
+    });
   } catch (error) {
     console.error('Error fetching games for add game page:', error);
     res.status(500).send('Internal Server Error');
@@ -56,14 +71,15 @@ const addGamePost = [
   upload.single('image'),
   body('title').isString().trim().notEmpty().withMessage('Title is required'),
   body('description').isString().trim().notEmpty().withMessage('Description is required'),
-  body('genre').isString().trim().notEmpty().withMessage('Genre is required'),
+  body('genre_id').isInt().withMessage('Genre ID must be an integer'),
   body('release_date').isDate().withMessage('Release date must be a valid date'),
   
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).render('form_game', { 
-        errors: errors.array() 
+        errors: errors.array(),
+        game: req.body
       });
     }
 
@@ -87,8 +103,9 @@ const editGameGet = async (req, res) => {
     if (!game) {
       return res.status(404).send('Game not found');
     }
+    const genres = await getAllGenres();
 
-    res.render('form_game', { game });
+    res.render('form_game', { game, genres });
   } catch (error) {
     console.error('Error fetching game for edit page:', error);
     res.status(500).send('Internal Server Error');
@@ -100,14 +117,15 @@ const editGamePost = [
   upload.single('image'),
   body('title').isString().trim().notEmpty().withMessage('Title is required'),
   body('description').isString().trim().notEmpty().withMessage('Description is required'),
-  body('genre').isString().trim().notEmpty().withMessage('Genre is required'),
+  body('genre_id').isInt().withMessage('Genre ID must be an integer'),
   body('release_date').isDate().withMessage('Release date must be a valid date'),
   
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).render('edit_game', { 
-        errors: errors.array() 
+      return res.status(400).render('form_game', { 
+        errors: errors.array(),
+        game: req.body  
       });
     }
 
