@@ -57,6 +57,11 @@ const deleteGameById = async (id) => {
   }
 };
 
-// Export the functions for use in other parts of the application
-module.exports = { getAllGames, addGame, getGameById, updateGameById, deleteGameById };
+module.exports = { 
+  getAllGames, 
+  addGame, 
+  getGameById, 
+  updateGameById, 
+  deleteGameById 
+};
 
