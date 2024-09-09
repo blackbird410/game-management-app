@@ -1,5 +1,6 @@
 
 const { body, validationResult } = require('express-validator');
+const { generateToken } = require('../lib/jwtUtils');
 const asyncHandler = require('express-async-handler');
 const multer = require('multer');
 
@@ -107,21 +108,15 @@ const loginPost = [
 
     try {
       const user = await getUserByEmail(req.body.email);
-      if (!user) {
+      if (!user || !validPassword(req.body.password, user.password_salt, user.password_hash)) {
         return res.status(401).render('login', { 
           errors: [{ msg: 'Invalid email or password' }],
           email: req.body.email,
         });
       }
 
-      if (!validPassword(req.body.password, user.password_salt, user.password_hash)) {
-        return res.status(401).render('login', { 
-          errors: [{ msg: 'Invalid email or password' }],
-          email: req.body.email,
-        });
-      }
-
-      req.session.user = user;
+      const token = generateToken(user);
+      res.cookie('token', token, { httpOnly: true, maxAge: 3600000 }); // 1 hour
       res.redirect('/');
     } catch (error) {
       console.error('Error logging in user:', error);
@@ -130,17 +125,11 @@ const loginPost = [
   }),
 ];
 
-
 const logout = asyncHandler(async (req, res, next) => {
-  req.session.destroy((error) => {
-    if (error) {
-      console.error('Error destroying session:', error);
-      return res.status(500).send('Internal Server Error');
-    }
-
-    res.redirect('/');
-  });
+  res.clearCookie('token');
+  res.redirect('/');
 });
+
 
 const addAdminGet = asyncHandler(async (req, res, next) => {
   res.render('add_admin');
