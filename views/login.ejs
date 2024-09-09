@@ -5,49 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
   <link rel="stylesheet" href="/stylesheets/main.css">
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f3f4f6; /* Tailwind's bg-gray-100 */
-    }
-  </style>
 </head>
-<body>
-  <div class="max-w-lg w-full bg-white p-8 rounded-lg shadow-md">
-    <h1 class="text-2xl font-bold mb-4 text-center">Login</h1>
-    <form action="/login" method="POST" class="space-y-4">
-      
-      <!-- Email Field -->
-      <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
-        <input type="email" id="email" name="email" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
-      </div>
+<body class="bg-gray-100">
+  <div class="container mx-auto p-6 text-gray-900">
+    <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+      <h1 class="text-2xl font-bold mb-4 text-center">Login</h1>
+      <form action="/login" method="POST" class="space-y-4">
+        
+        <!-- Email Field -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
+          <input type="email" id="email" name="email" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+        </div>
 
-      <!-- Password Field -->
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">Password:</label>
-        <input type="password" id="password" name="password" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
-      </div>
+        <!-- Password Field -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">Password:</label>
+          <input type="password" id="password" name="password" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+        </div>
 
-      <!-- Submit Button -->
-      <div>
-        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 w-full">Login</button>
-      </div>
+        <!-- Submit Button -->
+        <div>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 w-full">Login</button>
+        </div>
 
-    <% if (errors) { %>
-      <ul>
-        <% errors.forEach(function(error) { %>
-          <li class="text-red-600"><%= error.msg %></li>
-        <% }) %>
-      </ul>
-    <% } %>
-      
-    </form>
+        <% if (errors) { %>
+          <ul class="text-red-600">
+            <% errors.forEach(function(error) { %>
+              <li><%= error.msg %></li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </form>
+    </div>
   </div>
 </body>
 </html>
+
 

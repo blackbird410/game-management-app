@@ -41,7 +41,9 @@ const renderIndex = async (req, res) => {
 // Render the page for adding a new game
 const addGameGet = async (req, res) => {
   try {
-    res.render('form_game', { game: null });
+    res.render('form_game', { 
+      title: 'Add New Game',
+      game: null });
   } catch (error) {
     console.error('Error fetching games for add game page:', error);
     res.status(500).send('Internal Server Error');
@@ -68,7 +70,6 @@ const addGamePost = [
     try {
       const game = req.body;
 
-      console.log(req.file);
       if (req.file) game.image_key = await addImageToBucket(req.file.buffer, req.file.mimetype, req.file.originalname);
 
       await addGame(game);

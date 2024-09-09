@@ -142,7 +142,7 @@ const logout = asyncHandler(async (req, res, next) => {
 
 
 const addAdminGet = asyncHandler(async (req, res, next) => {
-  res.render('add_admin');
+  res.render('add_admin', { errors: null });
 });
 
 const addAdminPost = [
