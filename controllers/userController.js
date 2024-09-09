@@ -60,6 +60,15 @@ const registerPost = [
       });
     }
 
+    const isEmailAlreadyUsed = await getUserByEmail(req.body.email);
+    if (isEmailAlreadyUsed) {
+      return res.status(400).render('add_admin', { 
+        errors: [{ msg: 'Email is already in use' }],
+        name: req.body.name,
+        email: req.body.email,
+      });
+    }
+
     const { salt, hash } = genPassword(req.body.password);
     
     const user = {
@@ -137,6 +146,7 @@ const addAdminGet = asyncHandler(async (req, res, next) => {
 });
 
 const addAdminPost = [
+  upload.single('profile_picture'),
   body('name').isString().trim().notEmpty().withMessage('Name is required'),
   body('email').isEmail().normalizeEmail().withMessage('Email is required'),
   body('password').isString().trim().notEmpty().withMessage('Password is required'),
@@ -157,6 +167,15 @@ const addAdminPost = [
       });
     }
 
+    const isEmailAlreadyUsed = await getUserByEmail(req.body.email);
+    if (isEmailAlreadyUsed) {
+      return res.status(400).render('add_admin', { 
+        errors: [{ msg: 'Email is already in use' }],
+        name: req.body.name,
+        email: req.body.email,
+      });
+    }
+
     const { salt, hash } = genPassword(req.body.password);
 
     const user = {
@@ -166,6 +185,16 @@ const addAdminPost = [
       password_salt: salt,
       is_admin: true
     };
+
+    if (req.file) {
+      try {
+        user.image_key = await addImageToBucket(req.file.buffer, req.file.mimetype, req.file.originalname);
+        user.image_url = getImageSignedUrl(user.image_key);
+      } catch (error) {
+        console.error('Error uploading profile picture:', error);
+        return res.status(500).send('Internal Server Error');
+      }
+    }
 
     try {
       await addUser(user);
