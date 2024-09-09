@@ -1,6 +1,10 @@
 
 const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
+const multer = require('multer');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 const { 
   genPassword,
@@ -16,6 +20,12 @@ const {
   deleteUserById,
 } = require('../models/user');
 
+const { 
+  addImageToBucket, 
+  getImageSignedUrl, 
+  deleteImage 
+} = require('../lib/awsUtils');
+
 // Render the index page with users data
 const renderIndex = asyncHandler(async (req, res, next) => {
   const users = await getAllUsers();
@@ -28,6 +38,7 @@ const registerGet = asyncHandler(async (req, res, next) => {
 });
 
 const registerPost = [
+  upload.single('profile_picture'),
   body('name').isString().trim().notEmpty().withMessage('Name is required'),
   body('email').isEmail().normalizeEmail().withMessage('Email is required'),
   body('password').isString().trim().notEmpty().withMessage('Password is required'),
@@ -49,13 +60,23 @@ const registerPost = [
     }
 
     const { salt, hash } = genPassword(req.body.password);
-
+    
     const user = {
       name: req.body.name,
       email: req.body.email,
       password_hash: hash,
       password_salt: salt,
     };
+
+    if (req.file) {
+      try {
+        user.image_key = await addImageToBucket(req.file.buffer, req.file.mimetype, req.file.originalname);
+        user.image_url = getImageSignedUrl(user.image_key);
+      } catch (error) {
+        console.error('Error uploading profile picture:', error);
+        return res.status(500).send('Internal Server Error');
+      }
+    }
 
     try {
       await addUser(user);

@@ -55,9 +55,16 @@
       <div>
         <button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 w-full">Register</button>
       </div>
+
+    <% if (errors) { %>
+      <ul>
+        <% errors.forEach(function(error) { %>
+          <li><%= error.msg %></li>
+        <% }) %>
+      </ul>
+    <% } %>
       
     </form>
   </div>
 </body>
-</html>
 
