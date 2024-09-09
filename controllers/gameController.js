@@ -3,12 +3,18 @@ const multer = require('multer');
 const { body, validationResult } = require('express-validator');
 
 const { 
+  addGame,
   getAllGames, 
   getGameById,
   updateGameById,
-  addGame
+  deleteGameById,
 } = require('../models/game');
-const { addImageToBucket, getImageSignedUrl } = require('../lib/awsUtils');
+
+const { 
+  addImageToBucket, 
+  getImageSignedUrl, 
+  deleteImage 
+} = require('../lib/awsUtils');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -115,11 +121,46 @@ const editGamePost = [
   }
 ];
 
+const deleteGameGet = async(req, res) => {
+  try {
+    const game = await getGameById(req.params.id);
+    if (!game) {
+      return res.status(404).send('Game not found');
+    }
+
+    res.render('delete_game', { game });
+  } catch (error) {
+    console.error('Error fetching game for delete page:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+const deleteGamePost = async(req, res) => {
+  try {
+    const game = await getGameById(req.params.id);
+    if (!game) {
+      return res.status(404).send('Game not found');
+    }
+
+    if (game.image_key) {
+      await deleteImage(game.image_key);
+    }
+
+    await deleteGameById(req.params.id);
+    res.redirect('/');
+  } catch (error) {
+    console.error('Error deleting game:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
 module.exports = { 
   renderIndex, 
   addGameGet,
   addGamePost,
   editGameGet,
-  editGamePost
+  editGamePost,
+  deleteGameGet,
+  deleteGamePost,
 };
 
