@@ -35,7 +35,7 @@ const renderIndex = asyncHandler(async (req, res, next) => {
 });
 
 const registerGet = asyncHandler(async (req, res, next) => {
-  res.render('register');
+  res.render('register', { errors: null });
 });
 
 const registerPost = [
@@ -90,7 +90,7 @@ const registerPost = [
 ];
 
 const loginGet = asyncHandler(async (req, res, next) => {
-  res.render('login');
+  res.render('login', { errors: null });
 });
 
 const loginPost = [
@@ -99,6 +99,7 @@ const loginPost = [
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
       return res.status(400).render('login', { 
         errors: errors.array(),
