@@ -32,6 +32,7 @@ const upload = multer({ storage });
 const renderIndex = async (req, res) => {
   try {
     const games = await getAllGames();
+    const genres = await getAllGenres();
 
     for (const game of games) {
       game.image_url = getImageSignedUrl(game.image_key);
@@ -39,7 +40,8 @@ const renderIndex = async (req, res) => {
 
     res.render('game_collection', {
       title: "Game Collection",
-      games: games
+      games: games,
+      genres: genres
     });
   } catch (error) {
     console.error('Error fetching games:', error);
