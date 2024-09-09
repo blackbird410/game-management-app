@@ -38,7 +38,7 @@ const renderIndex = async (req, res) => {
 // Render the page for adding a new game
 const addGameGet = async (req, res) => {
   try {
-    res.render('form_game');
+    res.render('form_game', { game: null });
   } catch (error) {
     console.error('Error fetching games for add game page:', error);
     res.status(500).send('Internal Server Error');
@@ -57,7 +57,7 @@ const addGamePost = [
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).render('add_game', { 
+      return res.status(400).render('form_game', { 
         errors: errors.array() 
       });
     }

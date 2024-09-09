@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,33 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= game ? "Edit Game" : "Add Game" %></title>
   <link rel="stylesheet" href="/stylesheets/main.css">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f3f4f6; /* Tailwind's bg-gray-100 */
+    }
+    .form-container {
+      max-width: 600px; /* Adjust as needed */
+      width: 100%;
+      padding: 2rem;
+      background: #ffffff;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 p-6">
-  <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
+<body>
+  <div class="form-container">
     <h1 class="text-2xl font-bold mb-4"><%= game ? "Edit Game" : "Add a New Game" %></h1>
     <form action="<%= game ? `/edit-game/${game.id}` : '/add-game' %>" method="POST" class="space-y-4" enctype="multipart/form-data">
+      
+      <!-- Title Field -->
       <div>
         <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
         <input type="text" id="title" name="title" value="<%= game ? game.title : '' %>" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
       </div>
+
+      <!-- Release Date Field -->
       <div>
         <label for="release_date" class="block text-sm font-medium text-gray-700">Release Date:</label>
         <input type="date" id="release_date" name="release_date" value="<%= game ? game.release_date : '' %>" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
       </div>
+
+      <!-- Genre Field -->
       <div>
         <label for="genre" class="block text-sm font-medium text-gray-700">Genre:</label>
         <input type="text" id="genre" name="genre" value="<%= game ? game.genre : '' %>" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
       </div>
+
+      <!-- Description Field -->
       <div>
         <label for="description" class="block text-sm font-medium text-gray-700">Description:</label>
         <textarea id="description" name="description" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"><%= game ? game.description : '' %></textarea>
       </div>
+
+      <!-- Image Field -->
       <div>
         <label for="image" class="block text-sm font-medium text-gray-700">Image:</label>
         <input type="file" id="image" name="image" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
       </div>
+
+      <!-- Submit Button -->
       <div>
-        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700">
+        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 w-full">
           <%= game ? "Update Game" : "Add Game" %>
         </button>
       </div>
