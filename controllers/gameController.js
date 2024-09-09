@@ -10,14 +10,8 @@ const {
   deleteGameById,
 } = require('../models/game');
 
-const { 
-  getAllGenres,
-  getGenreById,
-  getGenreByName,
-  addGenre,
-  updateGenreById,
-  deleteGenreById,
-} = require('../models/genre');
+const { getAllGenres } = require('../models/genre');
+const { getAllDevelopers } = require('../models/developer');
 
 const { 
   addImageToBucket, 
@@ -33,6 +27,7 @@ const renderIndex = async (req, res) => {
   try {
     const games = await getAllGames();
     const genres = await getAllGenres();
+    const developers = await getAllDevelopers();
 
     for (const game of games) {
       game.image_url = getImageSignedUrl(game.image_key);
@@ -41,7 +36,8 @@ const renderIndex = async (req, res) => {
     res.render('game_collection', {
       title: "Game Collection",
       games: games,
-      genres: genres
+      genres: genres,
+      developers: developers
     });
   } catch (error) {
     console.error('Error fetching games:', error);
@@ -53,11 +49,13 @@ const renderIndex = async (req, res) => {
 const addGameGet = async (req, res) => {
   try {
     const allGenres = await getAllGenres();
+    const allDevelopers = await getAllDevelopers();
 
     res.render('form_game', { 
       title: 'Add New Game',
       genres: allGenres,
-      game: null 
+      game: null,
+      developers: allDevelopers
     });
   } catch (error) {
     console.error('Error fetching games for add game page:', error);
@@ -72,6 +70,7 @@ const addGamePost = [
   body('title').isString().trim().notEmpty().withMessage('Title is required'),
   body('description').isString().trim().notEmpty().withMessage('Description is required'),
   body('genre_id').isInt().withMessage('Genre ID must be an integer'),
+  body('developer_id').isInt().withMessage('Developer ID must be an integer'),
   body('release_date').isDate().withMessage('Release date must be a valid date'),
   
   async (req, res) => {
@@ -86,7 +85,14 @@ const addGamePost = [
     try {
       const game = req.body;
 
-      if (req.file) game.image_key = await addImageToBucket(req.file.buffer, req.file.mimetype, req.file.originalname);
+      if (req.file) {
+        try {
+          game.image_key = await addImageToBucket(req.file.buffer, req.file.mimetype, req.file.originalname);
+        } catch (error) {
+          console.error('Error uploading game image:', error);
+          return res.status(500).send('Internal Server Error');
+        }
+      }
 
       await addGame(game);
       res.redirect('/');
@@ -100,12 +106,15 @@ const addGamePost = [
 const editGameGet = async (req, res) => {
   try {
     const game = await getGameById(req.params.id);
+
     if (!game) {
       return res.status(404).send('Game not found');
     }
+    
     const genres = await getAllGenres();
+    const developers = await getAllDevelopers();
 
-    res.render('form_game', { game, genres });
+    res.render('form_game', { game, genres, developers });
   } catch (error) {
     console.error('Error fetching game for edit page:', error);
     res.status(500).send('Internal Server Error');
@@ -118,6 +127,7 @@ const editGamePost = [
   body('title').isString().trim().notEmpty().withMessage('Title is required'),
   body('description').isString().trim().notEmpty().withMessage('Description is required'),
   body('genre_id').isInt().withMessage('Genre ID must be an integer'),
+  body('developer_id').isInt().withMessage('Developer ID must be an integer'),
   body('release_date').isDate().withMessage('Release date must be a valid date'),
   
   async (req, res) => {
@@ -132,7 +142,14 @@ const editGamePost = [
     try {
       const game = req.body;
 
-      if (req.file) game.image_key = await addImageToBucket(req.file.buffer, req.file.mimetype, req.file.originalname);
+      if (req.file) {
+        try {
+          game.image_key = await addImageToBucket(req.file.buffer, req.file.mimetype, req.file.originalname);
+        } catch (error) {
+          console.error('Error uploading game image:', error);
+          return res.status(500).send('Internal Server Error');
+        }
+      }
 
       await updateGameById(req.params.id, game);
       res.redirect('/');
