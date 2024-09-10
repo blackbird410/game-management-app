@@ -1,7 +1,7 @@
 const checkAdmin = (req, res, next) => {
   console.log(req.user);
   if (!req.user?.is_admin) {
-    return res.status(403).send('Forbidden');
+    return res.render('unauthorized');
   }
   next();
 };
