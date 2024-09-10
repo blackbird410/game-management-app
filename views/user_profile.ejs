@@ -12,6 +12,14 @@
           <img src="<%= user.image_url %>" alt="Profile picture" class="h-24 w-24 rounded-full mt-2">
         <% } %>
       </div>
+
+      <% if (errors) { %>
+        <ul class="text-red-600">
+          <% errors.forEach(function(error) { %>
+            <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      <% } %>
       
       <!-- Name Field -->
       <div>

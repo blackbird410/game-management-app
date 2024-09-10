@@ -40,7 +40,10 @@ const renderProfile = async (req, res) => {
       return res.status(404).send('User not found');
     }
 
-    res.render('profile', { user });
+    res.render('user_profile', { 
+      user,
+      errors: null
+    });
   } catch (error) {
     console.error('Error fetching user for profile page:', error);
     res.status(500).send('Internal Server Error');
@@ -267,7 +270,7 @@ const updateUserPost = [
 
     try {
       await updateUserById(user.id, user);
-      res.redirect('/');
+      res.redirect('/profile');
     } catch (error) {
       console.error('Error updating user:', error);
       res.status(500).send('Internal Server Error');
@@ -276,9 +279,10 @@ const updateUserPost = [
 ];
 
 const updatePassword = [
-  body('password').isString().trim().notEmpty().withMessage('Password is required'),
+  body('old_password').isString().trim().notEmpty().withMessage('Old password is required'),
+  body('new_password').isString().trim().notEmpty().withMessage('New password is required'),
   body('confirm_password').custom((value, { req }) => {
-    if (value !== req.body.password) {
+    if (value !== req.body.new_password) {
       throw new Error('Passwords do not match');
     }
     return true;
@@ -291,6 +295,7 @@ const updatePassword = [
         errors: errors.array(),
         name: req.body.name,
         email: req.body.email,
+        user: null
       });
     }
 
@@ -299,19 +304,35 @@ const updatePassword = [
       return res.status(404).send('User not found');
     }
 
-    const { salt, hash } = genPassword(req.body.password);
+    const { old_password, new_password } = req.body;
+    console.log(old_password, new_password);
+
+    const isValidPassword = validPassword(old_password, user.password_salt, user.password_hash);
+    if (!isValidPassword) {
+      console.log('Password invalid');
+      return res.status(400).render('user_profile', { 
+        errors: [{ msg: 'Invalid old password' }],
+        name: req.body.name,
+        email: req.body.email,
+        user: null
+      });
+    }
+
+    // Generate new password hash and salt
+    const { salt, hash } = genPassword(new_password); // Use new_password
     user.password_hash = hash;
     user.password_salt = salt;
 
     try {
       await updateUserById(user.id, user);
-      res.redirect('/');
+      res.redirect('/profile');
     } catch (error) {
       console.error('Error updating user password:', error);
       res.status(500).send('Internal Server Error');
     }
   }),
 ];
+
 
 
 module.exports = { 
