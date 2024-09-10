@@ -18,10 +18,12 @@ const {
   getUserById,
   addUser,
   updateUserById,
+  getUserCount,
 } = require('../models/user');
 
 const { getUserPurchaseHistory } = require('../models/purchase_history');
 const { getAllGames } = require('../models/game');
+const { getAllDevelopers } = require('../models/developer');
 
 const { 
   addImageToBucket, 
@@ -74,6 +76,17 @@ const renderPurchaseHistory = async(req, res, next) => {
   }
 };
 
+const renderAdminDashboard = asyncHandler(async (req, res, next) => {
+  const developers = await getAllDevelopers();
+  const users = await getAllUsers();
+  const games = await getAllGames();
+
+  res.render('admin_dashboard', {
+    developersCount: developers.length, 
+    usersCount: users.length,
+    gamesCount: games.length
+  });
+});
 
 const registerGet = asyncHandler(async (req, res, next) => {
   res.render('register', { errors: null });
@@ -366,6 +379,7 @@ module.exports = {
   addAdminPost,
   renderProfile,
   renderPurchaseHistory,
+  renderAdminDashboard,
   updateUserGet,
   updateUserPost,
   updatePassword,

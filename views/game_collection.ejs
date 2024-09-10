@@ -21,8 +21,8 @@
         <!-- Button Section -->
         <div class="p-6 flex justify-between items-center mt-auto">
           <% if (is_admin) { %>
-            <a href="/edit-game/<%= game.id %>" class="text-indigo-600 hover:underline">Edit</a>
-            <a href="/delete-game/<%= game.id %>" class="text-red-600 hover:underline">Delete</a>
+            <a href="/admin/games/<%= game.id %>/edit" class="text-indigo-600 hover:underline">Edit</a>
+            <a href="/admin/games/<%= game.id %>/delete" class="text-red-600 hover:underline">Delete</a>
           <% } else { %>
             <a href="/add-to-cart/<%= game.id %>" class="bg-indigo-600 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-700 transition-all duration-200 ml-auto">Add To Cart</a>
           <% } %>

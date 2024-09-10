@@ -14,12 +14,12 @@
         Are you sure you want to delete the developer "<strong><%= developer.name %></strong>"? This action cannot be undone.
       </p>
 
-      <form action="/devs/<%= developer.id %>/delete" method="POST" class="space-y-4">
+      <form action="/admin/devs/<%= developer.id %>/delete" method="POST" class="space-y-4">
         <div class="flex justify-between">
           <button type="submit" class="px-4 py-2 bg-red-600 text-white font-semibold rounded-md shadow-sm hover:bg-red-700 w-full sm:w-auto">
             Confirm Delete
           </button>
-          <a href="/devs" class="px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-md shadow-sm hover:bg-gray-400 w-full sm:w-auto text-center">
+          <a href="/admin/devs" class="px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-md shadow-sm hover:bg-gray-400 w-full sm:w-auto text-center">
             Cancel
           </a>
         </div>
