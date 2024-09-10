@@ -232,13 +232,6 @@ const updateUserPost = [
   upload.single('profile_picture'),
   body('name').isString().trim().notEmpty().withMessage('Name is required'),
   body('email').isEmail().normalizeEmail().withMessage('Email is required'),
-  body('password').isString().trim().notEmpty().withMessage('Password is required'),
-  body('confirm_password').custom((value, { req }) => {
-    if (value !== req.body.password) {
-      throw new Error('Passwords do not match');
-    }
-    return true;
-  }),
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
@@ -250,17 +243,14 @@ const updateUserPost = [
       });
     }
 
+    // Updates only the user email, name and profile picture
     const user = await getUserById(req.user.id);
     if (!user) {
       return res.status(404).send('User not found');
     }
 
-    const { salt, hash } = genPassword(req.body.password);
-
     user.name = req.body.name;
     user.email = req.body.email;
-    user.password_hash = hash;
-    user.password_salt = salt;
 
     if (req.file) {
       try {
@@ -285,6 +275,44 @@ const updateUserPost = [
   }),
 ];
 
+const updatePassword = [
+  body('password').isString().trim().notEmpty().withMessage('Password is required'),
+  body('confirm_password').custom((value, { req }) => {
+    if (value !== req.body.password) {
+      throw new Error('Passwords do not match');
+    }
+    return true;
+  }),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render('user_profile', { 
+        errors: errors.array(),
+        name: req.body.name,
+        email: req.body.email,
+      });
+    }
+
+    const user = await getUserById(req.user.id);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    const { salt, hash } = genPassword(req.body.password);
+    user.password_hash = hash;
+    user.password_salt = salt;
+
+    try {
+      await updateUserById(user.id, user);
+      res.redirect('/');
+    } catch (error) {
+      console.error('Error updating user password:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  }),
+];
+
 
 module.exports = { 
   renderIndex, 
@@ -298,4 +326,5 @@ module.exports = {
   renderProfile,
   updateUserGet,
   updateUserPost,
+  updatePassword,
 };
