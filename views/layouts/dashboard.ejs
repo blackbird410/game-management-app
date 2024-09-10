@@ -1,0 +1,34 @@
+<!-- views/layouts/dashboard.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/stylesheets/main.css">
+</head>
+<body class="bg-gray-100">
+  <div class="flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 text-white h-screen">
+      <div class="p-4">
+        <h1 class="text-xl font-semibold">Admin Dashboard</h1>
+        <ul class="mt-4">
+          <li><a href="/admin/users" class="block py-2 px-4 hover:bg-gray-700">Users</a></li>
+          <li><a href="/admin/devs" class="block py-2 px-4 hover:bg-gray-700">Developers</a></li>
+          <li><a href="/admin/games" class="block py-2 px-4 hover:bg-gray-700">Games</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 p-6">
+      <div class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-md">
+        <%= body %> <!-- Placeholder for the page content -->
+      </div>
+    </main>
+  </div>
+</body>
+</html>
+

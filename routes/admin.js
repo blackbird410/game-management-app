@@ -7,7 +7,7 @@ const user_controller = require('../controllers/userController');
 const dev_controller = require('../controllers/devController');
 const { checkAdmin } = require('../middleware/checkAdmin');
 
-router.get('/dashboard', authenticateJWT, checkAdmin, user_controller.renderAdminDashboard);
+router.get('/', authenticateJWT, checkAdmin, user_controller.renderAdminDashboard);
 
 router.get('/games/add', authenticateJWT, checkAdmin, game_controller.addGameGet);
 router.post('/games/add', authenticateJWT, checkAdmin, game_controller.addGamePost);
@@ -15,6 +15,7 @@ router.post('/games/add', authenticateJWT, checkAdmin, game_controller.addGamePo
 router.get('/add', authenticateJWT, checkAdmin, user_controller.addAdminGet);
 router.post('/add', authenticateJWT, checkAdmin, user_controller.addAdminPost);
 
+router.get('/games', authenticateJWT, checkAdmin, game_controller.renderGames);
 router.get('/games/:id/edit', authenticateJWT, checkAdmin, game_controller.editGameGet);
 router.post('/games/:id/edit', authenticateJWT, checkAdmin, game_controller.editGamePost);
 router.get('/games/:id/delete', authenticateJWT, checkAdmin, game_controller.deleteGameGet);

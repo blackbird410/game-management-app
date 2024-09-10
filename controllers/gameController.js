@@ -49,6 +49,28 @@ const renderIndex = async (req, res) => {
   }
 };
 
+const renderGames = async (req, res) => {
+  try {
+    const games = await getAllGames();
+    const genres = await getAllGenres();
+    const developers = await getAllDevelopers();
+
+    for (const game of games) {
+      game.image_url = getImageSignedUrl(game.image_key);
+    }
+
+    res.render('games', {
+      title: "Game Collection",
+      games: games,
+      genres: genres,
+      devs: developers,
+    });
+  } catch (error) {
+    console.error('Error fetching games:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
 // Render the page for adding a new game
 const addGameGet = async (req, res) => {
   try {
@@ -227,6 +249,7 @@ const addToCartPost = async (req, res) => {
 
 module.exports = { 
   renderIndex, 
+  renderGames,
   addGameGet,
   addGamePost,
   editGameGet,

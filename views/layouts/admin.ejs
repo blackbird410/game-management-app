@@ -1,4 +1,6 @@
 
+<% layout('layouts/dashboard.ejs') %>
+
 <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Admin Dashboard</h1>
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -15,7 +17,7 @@
   <div class="bg-white p-6 rounded-lg shadow-md">
     <h2 class="text-xl font-semibold text-gray-700 mb-4">Total Developers</h2>
     <p class="text-4xl text-center font-bold text-gray-900"><%= developersCount %></p>
-    <a href="/admin/devs" class="block mt-4 text-center bg-green-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-green-700">
+    <a href="/admin/developers" class="block mt-4 text-center bg-green-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-green-700">
       Manage Developers
     </a>
   </div>

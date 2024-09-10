@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Games</title>
+  <link rel="stylesheet" href="/stylesheets/main.css">
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-4">Games List</h1>
+
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Genre</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Developer</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% games.forEach((game) => { %>
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= game.id %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= game.title %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= genres.find(genre => genre.id === game.genre_id).name %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= devs.find(dev => dev.id === game.developer_id).name %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= game.price %></td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <a href="/admin/games/<%= game.id %>/edit" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+              <a href="/admin/games/<%= game.id %>/delete" class="text-red-600 hover:text-red-900 ml-4">Delete</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <div class="mt-6">
+      <a href="/admin/games/add" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700">Add New Game</a>
+    </div>
+  </div>
+</body>
+</html>
+
