@@ -329,11 +329,9 @@ const updatePassword = [
     }
 
     const { old_password, new_password } = req.body;
-    console.log(old_password, new_password);
 
     const isValidPassword = validPassword(old_password, user.password_salt, user.password_hash);
     if (!isValidPassword) {
-      console.log('Password invalid');
       return res.status(400).render('user_profile', { 
         errors: [{ msg: 'Invalid old password' }],
         name: req.body.name,
@@ -356,8 +354,6 @@ const updatePassword = [
     }
   }),
 ];
-
-
 
 module.exports = { 
   renderIndex, 
