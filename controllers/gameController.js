@@ -1,4 +1,5 @@
 
+const { verifyToken } = require('../lib/jwtUtils');
 const multer = require('multer');
 const { body, validationResult } = require('express-validator');
 
@@ -12,6 +13,7 @@ const {
 
 const { getAllGenres } = require('../models/genre');
 const { getAllDevelopers } = require('../models/developer');
+const { addPurchaseHistory } = require('../models/purchase_history');
 
 const { 
   addImageToBucket, 
@@ -28,6 +30,15 @@ const renderIndex = async (req, res) => {
     const games = await getAllGames();
     const genres = await getAllGenres();
     const developers = await getAllDevelopers();
+    let isAdmin = false;
+
+    if (req.cookies) {
+      const token = req.cookies.token || req.headers['authorization']?.split(' ')[1];
+      if (token ) {
+        const user = verifyToken(token);
+        isAdmin = user.is_admin;
+      }
+    }
 
     for (const game of games) {
       game.image_url = getImageSignedUrl(game.image_key);
@@ -37,7 +48,8 @@ const renderIndex = async (req, res) => {
       title: "Game Collection",
       games: games,
       genres: genres,
-      developers: developers
+      developers: developers,
+      is_admin: isAdmin
     });
   } catch (error) {
     console.error('Error fetching games:', error);
@@ -193,6 +205,34 @@ const deleteGamePost = async(req, res) => {
   }
 };
 
+const addToCartGet = async (req, res) => {
+  const game = await getGameById(req.params.id);
+  return res.render('add_to_cart', { game });
+};
+
+const addToCartPost = async (req, res) => {
+  try {
+    const game = await getGameById(req.params.id);
+    if (!game) {
+      return res.status(404).send('Game not found');
+    }
+
+    const purchaseHistory = {
+      user_id: req.user.id,
+      game_id: game.id,
+      purchase_date: new Date().toISOString(),
+      quantity: req.body.quantity,
+      price: game.price
+    };
+
+    await addPurchaseHistory(purchaseHistory);
+    res.redirect('/');
+  } catch (error) {
+    console.error('Error adding game to cart:', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
 module.exports = { 
   renderIndex, 
   addGameGet,
@@ -201,5 +241,7 @@ module.exports = {
   editGamePost,
   deleteGameGet,
   deleteGamePost,
+  addToCartGet,
+  addToCartPost,
 };
 

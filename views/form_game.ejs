@@ -48,6 +48,12 @@
         <textarea id="description" name="description" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"><%= game ? game.description : '' %></textarea>
       </div>
 
+      <!-- Price Field -->
+      <div>
+        <label for="price" class="block text-sm font-medium text-gray-700">Price:</label>
+        <input type="number" min="0" id="price" name="price" value="<%= game ? game.price : '' %>" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+      </div>
+
       <!-- Image Field -->
       <div>
         <label for="image" class="block text-sm font-medium text-gray-700">Image:</label>
