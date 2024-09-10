@@ -222,6 +222,7 @@ const addToCartPost = async (req, res) => {
       game_id: game.id,
       purchase_date: new Date().toISOString(),
       quantity: req.body.quantity,
+      price: game.price
     };
 
     await addPurchaseHistory(purchaseHistory);
