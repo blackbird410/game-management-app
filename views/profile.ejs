@@ -1,0 +1,96 @@
+
+<div class="container mx-auto p-6 text-gray-900">
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-4 text-center">User Profile</h1>
+
+    <!-- User Profile Form -->
+    <form action="/profile/update" method="POST" class="space-y-4" enctype="multipart/form-data">
+      
+      <!-- Name Field -->
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
+        <input type="text" id="name" name="name" value="<%= user ? user.name : '' %>" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+      </div>
+
+      <!-- Email Field -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
+        <input type="email" id="email" name="email" value="<%= user ? user.email : '' %>" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+      </div>
+
+      <!-- Profile Picture Field -->
+      <div>
+        <label for="profile_picture" class="block text-sm font-medium text-gray-700">Profile Picture:</label>
+        <input type="file" id="profile_picture" name="profile_picture" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        <% if (user && user.image_url) { %>
+          <img src="<%= user.image_url %>" alt="Profile picture" class="h-12 w-12 rounded-full mt-2">
+        <% } %>
+      </div>
+
+      <!-- Submit Button -->
+      <div>
+        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 w-full">
+          Update Profile
+        </button>
+      </div>
+    </form>
+
+    <!-- Password Update Form -->
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold text-gray-700">Change Password</h2>
+      <form action="/profile/password" method="POST" class="space-y-4">
+        
+        <!-- Old Password Field -->
+        <div>
+          <label for="old_password" class="block text-sm font-medium text-gray-700">Current Password:</label>
+          <input type="password" id="old_password" name="old_password" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+        </div>
+
+        <!-- New Password Field -->
+        <div>
+          <label for="new_password" class="block text-sm font-medium text-gray-700">New Password:</label>
+          <input type="password" id="new_password" name="new_password" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div>
+          <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirm New Password:</label>
+          <input type="password" id="confirm_password" name="confirm_password" class="mt-1 px-4 py-2 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 w-full">
+            Change Password
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Account Information -->
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold text-gray-700">Account Information</h2>
+      <div class="space-y-4">
+        
+        <!-- Account Creation Date -->
+        <div>
+          <span class="block text-sm font-medium text-gray-700">Account Created:</span>
+          <p class="mt-1 text-gray-600"><%= user ? user.created_at : '' %></p>
+        </div>
+
+        <!-- Role -->
+        <div>
+          <span class="block text-sm font-medium text-gray-700">Role:</span>
+          <p class="mt-1 text-gray-600"><%= user ? (user.is_admin ? 'Admin' : 'User') : '' %></p>
+        </div>
+
+        <!-- Verification Status -->
+        <div>
+          <span class="block text-sm font-medium text-gray-700">Verified:</span>
+          <p class="mt-1 text-gray-600"><%= user ? (user.verified ? 'Verified' : 'Not Verified') : '' %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

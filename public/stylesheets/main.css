@@ -559,6 +559,9 @@ video {
 .mt-6 {
   margin-top: 1.5rem;
 }
+.mt-8 {
+  margin-top: 2rem;
+}
 .block {
   display: block;
 }
@@ -574,11 +577,17 @@ video {
 .hidden {
   display: none;
 }
+.h-12 {
+  height: 3rem;
+}
 .h-24 {
   height: 6rem;
 }
 .h-48 {
   height: 12rem;
+}
+.w-12 {
+  width: 3rem;
 }
 .w-24 {
   width: 6rem;

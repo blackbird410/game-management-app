@@ -14,11 +14,10 @@ const {
 
 const { 
   getAllUsers,
-  getUserById,
   getUserByEmail,
+  getUserById,
   addUser,
   updateUserById,
-  deleteUserById,
 } = require('../models/user');
 
 const { 
@@ -33,6 +32,21 @@ const renderIndex = asyncHandler(async (req, res, next) => {
 
   res.render('users', { users });
 });
+
+const renderProfile = async (req, res) => {
+  try {
+    const user = await getUserById(req.user.id);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    res.render('profile', { user });
+  } catch (error) {
+    console.error('Error fetching user for profile page:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
 
 const registerGet = asyncHandler(async (req, res, next) => {
   res.render('register', { errors: null });
@@ -206,6 +220,72 @@ const addAdminPost = [
   }),
 ];
 
+const updateUserGet = asyncHandler(async (req, res, next) => {
+  const user = await getUserById(req.user.id);
+  res.render('user_profile', { 
+    errors: null,
+    user,
+  });
+});
+
+const updateUserPost = [
+  upload.single('profile_picture'),
+  body('name').isString().trim().notEmpty().withMessage('Name is required'),
+  body('email').isEmail().normalizeEmail().withMessage('Email is required'),
+  body('password').isString().trim().notEmpty().withMessage('Password is required'),
+  body('confirm_password').custom((value, { req }) => {
+    if (value !== req.body.password) {
+      throw new Error('Passwords do not match');
+    }
+    return true;
+  }),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render('user_profile', { 
+        errors: errors.array(),
+        name: req.body.name,
+        email: req.body.email,
+      });
+    }
+
+    const user = await getUserById(req.user.id);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    const { salt, hash } = genPassword(req.body.password);
+
+    user.name = req.body.name;
+    user.email = req.body.email;
+    user.password_hash = hash;
+    user.password_salt = salt;
+
+    if (req.file) {
+      try {
+        if (user.image_key) {
+          await deleteImage(user.image_key);
+        }
+        user.image_key = await addImageToBucket(req.file.buffer, req.file.mimetype, req.file.originalname);
+        user.image_url = getImageSignedUrl(user.image_key);
+      } catch (error) {
+        console.error('Error uploading profile picture:', error);
+        return res.status(500).send('Internal Server Error');
+      }
+    }
+
+    try {
+      await updateUserById(user.id, user);
+      res.redirect('/');
+    } catch (error) {
+      console.error('Error updating user:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  }),
+];
+
+
 module.exports = { 
   renderIndex, 
   registerGet,
@@ -215,4 +295,7 @@ module.exports = {
   logout,
   addAdminGet,
   addAdminPost,
+  renderProfile,
+  updateUserGet,
+  updateUserPost,
 };
