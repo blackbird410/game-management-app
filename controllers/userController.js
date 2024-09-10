@@ -20,6 +20,9 @@ const {
   updateUserById,
 } = require('../models/user');
 
+const { getUserPurchaseHistory } = require('../models/purchase_history');
+const { getAllGames } = require('../models/game');
+
 const { 
   addImageToBucket, 
   getImageSignedUrl, 
@@ -46,6 +49,27 @@ const renderProfile = async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching user for profile page:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+const renderPurchaseHistory = async(req, res, next) => {
+  try {
+    const user = req.user;
+    const purchaseHistory = await getUserPurchaseHistory(user.id);
+    let updatedPurchases = [];
+    const games = await getAllGames();
+
+    for (const game of games) game.image_url = getImageSignedUrl(game.image_key);
+
+    for (const purchase of purchaseHistory) {
+      const game = games.find(g => g.id === purchase.game_id);
+      updatedPurchases.push({ ...purchase, game });
+    }
+
+    res.render('purchase_history', { purchases: updatedPurchases });
+  } catch (error) {
+    console.error('Error fetching user purchase history:', error);
     res.status(500).send('Internal Server Error');
   }
 };
@@ -345,6 +369,7 @@ module.exports = {
   addAdminGet,
   addAdminPost,
   renderProfile,
+  renderPurchaseHistory,
   updateUserGet,
   updateUserPost,
   updatePassword,

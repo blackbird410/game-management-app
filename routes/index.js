@@ -27,7 +27,7 @@ router.post('/add-admin', authenticateJWT, checkAdmin, user_controller.addAdminP
 
 router.get('/add-to-cart/:id', authenticateJWT, game_controller.addToCartGet);
 router.post('/add-to-cart/:id', authenticateJWT, game_controller.addToCartPost);
-// router.get('/cart', authenticateJWT, game_controller.renderCart);
+router.get('/purchases', authenticateJWT, user_controller.renderPurchaseHistory);
 
 router.get('/register', user_controller.registerGet);
 router.post('/register', user_controller.registerPost);
