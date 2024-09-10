@@ -14,12 +14,12 @@
         Are you sure you want to delete the game "<strong><%= game.title %></strong>"? This action cannot be undone.
       </p>
 
-      <form action="/delete-game/<%= game.id %>" method="POST" class="space-y-4">
+      <form action="/admin/games/<%= game.id %>/delete" method="POST" class="space-y-4">
         <div class="flex justify-between">
           <button type="submit" class="px-4 py-2 bg-red-600 text-white font-semibold rounded-md shadow-sm hover:bg-red-700 w-full sm:w-auto">
             Confirm Delete
           </button>
-          <a href="/games" class="px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-md shadow-sm hover:bg-gray-400 w-full sm:w-auto text-center">
+          <a href="/admin/games" class="px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-md shadow-sm hover:bg-gray-400 w-full sm:w-auto text-center">
             Cancel
           </a>
         </div>

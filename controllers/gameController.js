@@ -49,6 +49,28 @@ const renderIndex = async (req, res) => {
   }
 };
 
+const renderGames = async (req, res) => {
+  try {
+    const games = await getAllGames();
+    const genres = await getAllGenres();
+    const developers = await getAllDevelopers();
+
+    for (const game of games) {
+      game.image_url = getImageSignedUrl(game.image_key);
+    }
+
+    res.render('games', {
+      title: "Game Collection",
+      games: games,
+      genres: genres,
+      devs: developers,
+    });
+  } catch (error) {
+    console.error('Error fetching games:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
 // Render the page for adding a new game
 const addGameGet = async (req, res) => {
   try {
@@ -99,7 +121,7 @@ const addGamePost = [
       }
 
       await addGame(game);
-      res.redirect('/');
+      res.redirect('/admin/games');
     } catch (error) {
       console.error('Error adding game:', error);
       res.status(500).send('Internal Server Error');
@@ -156,7 +178,7 @@ const editGamePost = [
       }
 
       await updateGameById(req.params.id, game);
-      res.redirect('/');
+      res.redirect('/admin/games');
     } catch (error) {
       console.error('Error updating game:', error);
       res.status(500).send('Internal Server Error');
@@ -190,7 +212,7 @@ const deleteGamePost = async(req, res) => {
     }
 
     await deleteGameById(req.params.id);
-    res.redirect('/');
+    res.redirect('/admin/games');
   } catch (error) {
     console.error('Error deleting game:', error);
     res.status(500).send('Internal Server Error');
@@ -227,6 +249,7 @@ const addToCartPost = async (req, res) => {
 
 module.exports = { 
   renderIndex, 
+  renderGames,
   addGameGet,
   addGamePost,
   editGameGet,
