@@ -8,6 +8,11 @@ const user_controller = require('../controllers/userController');
 // Route to render the index page
 router.get('/', game_controller.renderIndex);
 router.get('/home', game_controller.renderIndex);
+
+router.get('/profile', authenticateJWT, user_controller.renderProfile);
+router.post('/profile/update', authenticateJWT, user_controller.updateUserPost);
+router.post ('/profile/password', authenticateJWT, user_controller.updatePassword);
+
 router.get('/games', game_controller.renderIndex);
 router.get('/add-game', authenticateJWT, game_controller.addGameGet);
 router.post('/add-game', authenticateJWT, game_controller.addGamePost);
