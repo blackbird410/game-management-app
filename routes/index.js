@@ -4,7 +4,7 @@ const authenticateJWT = require('../middleware/auth');
 
 const game_controller = require('../controllers/gameController');
 const user_controller = require('../controllers/userController');
-const checkAdmin = require('../middleware/checkAdmin');
+const { checkAdmin } = require('../middleware/checkAdmin');
 
 // Route to render the index page
 router.get('/', game_controller.renderIndex);

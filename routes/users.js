@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authenticateJWT = require('../middleware/auth');
-const checkAdmin = require('../middleware/checkAdmin');
+const { checkAdmin } = require('../middleware/checkAdmin');
 
 const user_controller = require('../controllers/userController');
 

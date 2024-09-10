@@ -2,6 +2,7 @@
 const { verifyToken } = require('../lib/jwtUtils');
 const multer = require('multer');
 const { body, validationResult } = require('express-validator');
+const { isAdmin } = require('../middleware/checkAdmin');
 
 const { 
   addGame,
@@ -30,15 +31,6 @@ const renderIndex = async (req, res) => {
     const games = await getAllGames();
     const genres = await getAllGenres();
     const developers = await getAllDevelopers();
-    let isAdmin = false;
-
-    if (req.cookies) {
-      const token = req.cookies.token || req.headers['authorization']?.split(' ')[1];
-      if (token ) {
-        const user = verifyToken(token);
-        isAdmin = user.is_admin;
-      }
-    }
 
     for (const game of games) {
       game.image_url = getImageSignedUrl(game.image_key);
@@ -49,7 +41,7 @@ const renderIndex = async (req, res) => {
       games: games,
       genres: genres,
       developers: developers,
-      is_admin: isAdmin
+      is_admin: isAdmin(req)
     });
   } catch (error) {
     console.error('Error fetching games:', error);
