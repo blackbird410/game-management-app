@@ -25,6 +25,10 @@ router.post('/delete-game/:id', authenticateJWT, checkAdmin, game_controller.del
 router.get('/add-admin', authenticateJWT, checkAdmin, user_controller.addAdminGet);
 router.post('/add-admin', authenticateJWT, checkAdmin, user_controller.addAdminPost);
 
+router.get('/add-to-cart/:id', authenticateJWT, game_controller.addToCartGet);
+router.post('/add-to-cart/:id', authenticateJWT, game_controller.addToCartPost);
+// router.get('/cart', authenticateJWT, game_controller.renderCart);
+
 router.get('/register', user_controller.registerGet);
 router.post('/register', user_controller.registerPost);
 router.get('/login', user_controller.loginGet);

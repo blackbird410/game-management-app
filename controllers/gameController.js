@@ -13,6 +13,7 @@ const {
 
 const { getAllGenres } = require('../models/genre');
 const { getAllDevelopers } = require('../models/developer');
+const { addPurchaseHistory } = require('../models/purchase_history');
 
 const { 
   addImageToBucket, 
@@ -204,6 +205,33 @@ const deleteGamePost = async(req, res) => {
   }
 };
 
+const addToCartGet = async (req, res) => {
+  const game = await getGameById(req.params.id);
+  return res.render('add_to_cart', { game });
+};
+
+const addToCartPost = async (req, res) => {
+  try {
+    const game = await getGameById(req.params.id);
+    if (!game) {
+      return res.status(404).send('Game not found');
+    }
+
+    const purchaseHistory = {
+      user_id: req.user.id,
+      game_id: game.id,
+      purchase_date: new Date().toISOString(),
+      quantity: req.body.quantity,
+    };
+
+    await addPurchaseHistory(purchaseHistory);
+    res.redirect('/');
+  } catch (error) {
+    console.error('Error adding game to cart:', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
 module.exports = { 
   renderIndex, 
   addGameGet,
@@ -212,5 +240,7 @@ module.exports = {
   editGamePost,
   deleteGameGet,
   deleteGamePost,
+  addToCartGet,
+  addToCartPost,
 };
 
