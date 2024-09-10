@@ -4,6 +4,7 @@ const authenticateJWT = require('../middleware/auth');
 
 const game_controller = require('../controllers/gameController');
 const user_controller = require('../controllers/userController');
+const checkAdmin = require('../middleware/checkAdmin');
 
 // Route to render the index page
 router.get('/', game_controller.renderIndex);
@@ -14,15 +15,15 @@ router.post('/profile/update', authenticateJWT, user_controller.updateUserPost);
 router.post ('/profile/password', authenticateJWT, user_controller.updatePassword);
 
 router.get('/games', game_controller.renderIndex);
-router.get('/add-game', authenticateJWT, game_controller.addGameGet);
-router.post('/add-game', authenticateJWT, game_controller.addGamePost);
-router.get('/edit-game/:id', authenticateJWT, game_controller.editGameGet);
-router.post('/edit-game/:id', authenticateJWT, game_controller.editGamePost);
-router.get('/delete-game/:id', authenticateJWT, game_controller.deleteGameGet);
-router.post('/delete-game/:id', authenticateJWT, game_controller.deleteGamePost);
+router.get('/add-game', authenticateJWT, checkAdmin, game_controller.addGameGet);
+router.post('/add-game', authenticateJWT, checkAdmin, game_controller.addGamePost);
+router.get('/edit-game/:id', authenticateJWT, checkAdmin, game_controller.editGameGet);
+router.post('/edit-game/:id', authenticateJWT, checkAdmin, game_controller.editGamePost);
+router.get('/delete-game/:id', authenticateJWT, checkAdmin, game_controller.deleteGameGet);
+router.post('/delete-game/:id', authenticateJWT, checkAdmin, game_controller.deleteGamePost);
 
-router.get('/add-admin', authenticateJWT, user_controller.addAdminGet);
-router.post('/add-admin', authenticateJWT, user_controller.addAdminPost);
+router.get('/add-admin', authenticateJWT, checkAdmin, user_controller.addAdminGet);
+router.post('/add-admin', authenticateJWT, checkAdmin, user_controller.addAdminPost);
 
 router.get('/register', user_controller.registerGet);
 router.post('/register', user_controller.registerPost);
