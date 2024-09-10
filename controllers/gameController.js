@@ -121,7 +121,7 @@ const addGamePost = [
       }
 
       await addGame(game);
-      res.redirect('/');
+      res.redirect('/admin/games');
     } catch (error) {
       console.error('Error adding game:', error);
       res.status(500).send('Internal Server Error');
@@ -178,7 +178,7 @@ const editGamePost = [
       }
 
       await updateGameById(req.params.id, game);
-      res.redirect('/');
+      res.redirect('/admin/games');
     } catch (error) {
       console.error('Error updating game:', error);
       res.status(500).send('Internal Server Error');
@@ -212,7 +212,7 @@ const deleteGamePost = async(req, res) => {
     }
 
     await deleteGameById(req.params.id);
-    res.redirect('/');
+    res.redirect('/admin/games');
   } catch (error) {
     console.error('Error deleting game:', error);
     res.status(500).send('Internal Server Error');
