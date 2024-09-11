@@ -149,7 +149,7 @@ const registerPost = [
     try {
       console.log(user);
       await addUser(user);
-      res.redirect('/');
+      res.redirect('/login');
     } catch (error) {
       console.error('Error adding user:', error);
       res.status(500).send('Internal Server Error');
