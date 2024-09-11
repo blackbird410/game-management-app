@@ -37,6 +37,35 @@ const getGameById = async (id) => {
   }
 };
 
+// Function to get games by genres 
+const getGamesByGenre = async (genre_id) => {
+  try {
+    return await knex('games').where({ genre_id }).select('*');
+  } catch (error) {
+    console.error('Error fetching games by genre:', error);
+    throw error;
+  }
+};
+
+// Function to get games by developpers
+const getGamesByDeveloper = async (developer_id) => {
+  try {
+    return await knex('games').where({ developer_id }).select('*');
+  } catch (error) {
+    console.error('Error fetching games by developer:', error);
+    throw error;
+  }
+}
+
+const getGamesByGenreDeveloper = async (genre_id, developer_id) => {
+  try {
+    return await knex('games').where({ genre_id, developer_id }).select('*');
+  } catch (error) {
+    console.error('Error fetching games by genre and developer:', error);
+    throw error;
+  }
+}
+
 // Function to update a game by ID
 const updateGameById = async (id, gameUpdates) => {
   try {
@@ -59,6 +88,9 @@ const deleteGameById = async (id) => {
 
 module.exports = { 
   getAllGames, 
+  getGamesByGenre,
+  getGamesByDeveloper,
+  getGamesByGenreDeveloper,
   addGame, 
   getGameById, 
   updateGameById, 

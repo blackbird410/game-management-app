@@ -14,6 +14,7 @@ router.post('/profile/update', authenticateJWT, user_controller.updateUserPost);
 router.post ('/profile/password', authenticateJWT, user_controller.updatePassword);
 
 router.get('/games', game_controller.renderIndex);
+router.post('/games/filter', game_controller.renderFilteredIndex);
 
 
 router.get('/add-to-cart/:id', authenticateJWT, game_controller.addToCartGet);
