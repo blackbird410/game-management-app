@@ -2,7 +2,11 @@
 const multer = require('multer');
 const { body, validationResult } = require('express-validator');
 const asyncHandler = require('express-async-handler');
-const { isAdmin } = require('../middleware/checkAdmin');
+
+const { 
+  isAdmin,
+  getUserData
+} = require('../middleware/checkAdmin');
 
 const { 
   addGame,
@@ -52,6 +56,7 @@ const renderIndex = asyncHandler(async (req, res) => {
 
   res.render('game_collection', {
     title: "Game Collection",
+    user: getUserData(req),
     games: games,
     genres: genres,
     developers: developers,
@@ -71,8 +76,11 @@ const renderGames = async (req, res) => {
       game.image_url = getImageSignedUrl(game.image_key);
     }
 
+    const user = getUserData(req);
+
     res.render('games', {
       title: "Game Collection",
+      user,
       games: games,
       genres: genres,
       devs: developers,
@@ -91,6 +99,7 @@ const addGameGet = async (req, res) => {
 
     res.render('form_game', { 
       title: 'Add New Game',
+      user: req.user,
       genres: allGenres,
       game: null,
       developers: allDevelopers
@@ -116,7 +125,8 @@ const addGamePost = [
     if (!errors.isEmpty()) {
       return res.status(400).render('form_game', { 
         errors: errors.array(),
-        game: req.body
+        game: req.body,
+        user: req.user
       });
     }
 
@@ -152,7 +162,7 @@ const editGameGet = async (req, res) => {
     const genres = await getAllGenres();
     const developers = await getAllDevelopers();
 
-    res.render('form_game', { game, genres, developers });
+    res.render('form_game', { game, genres, developers, user: req.user });
   } catch (error) {
     console.error('Error fetching game for edit page:', error);
     res.status(500).send('Internal Server Error');
@@ -173,7 +183,8 @@ const editGamePost = [
     if (!errors.isEmpty()) {
       return res.status(400).render('form_game', { 
         errors: errors.array(),
-        game: req.body  
+        game: req.body,
+        user: req.user
       });
     }
 
@@ -205,7 +216,7 @@ const deleteGameGet = async(req, res) => {
       return res.status(404).send('Game not found');
     }
 
-    res.render('delete_game', { game });
+    res.render('delete_game', { game, user: req.user });
   } catch (error) {
     console.error('Error fetching game for delete page:', error);
     res.status(500).send('Internal Server Error');
@@ -233,7 +244,7 @@ const deleteGamePost = async(req, res) => {
 
 const addToCartGet = async (req, res) => {
   const game = await getGameById(req.params.id);
-  return res.render('add_to_cart', { game });
+  return res.render('add_to_cart', { game, user: req.user });
 };
 
 const addToCartPost = async (req, res) => {
