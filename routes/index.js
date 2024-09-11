@@ -6,16 +6,16 @@ const game_controller = require('../controllers/gameController');
 const user_controller = require('../controllers/userController');
 
 // Route to render the index page
-router.get('/', game_controller.renderIndex);
+router.get('/', game_controller.renderFilteredIndex);
+router.post('/', game_controller.renderFilteredIndex);
 router.get('/home', (req, res) => res.redirect('/'));
 
 router.get('/profile', authenticateJWT, user_controller.renderProfile);
 router.post('/profile/update', authenticateJWT, user_controller.updateUserPost);
 router.post ('/profile/password', authenticateJWT, user_controller.updatePassword);
 
-router.get('/games', game_controller.renderIndex);
-router.post('/games/filter', game_controller.renderFilteredIndex);
-
+router.get('/games', (req, res) => res.redirect('/'));
+router.post('/games', (req, res) => res.redirect('/'));
 
 router.get('/add-to-cart/:id', authenticateJWT, game_controller.addToCartGet);
 router.post('/add-to-cart/:id', authenticateJWT, game_controller.addToCartPost);
