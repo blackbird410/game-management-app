@@ -8,7 +8,7 @@
     <!-- Genre filter selector -->
     <div class="flex flex-col justify-center">
       <label for="genre" class="block text-sm font-medium text-gray-700">Filter by Genre</label>
-      <select name="genre_id" id="genre" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+      <select name="genre_id" id="genre" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" onchange="this.form.submit()">
         <option value="">All Genres</option>
         <% genres.forEach(genre => { %>
           <option value="<%= genre.id %>" <%= (selectedGenre && selectedGenre == genre.id) ? 'selected' : '' %>><%= genre.name %></option>
@@ -19,17 +19,12 @@
     <!-- Developer filter selector -->
     <div class="flex flex-col justify-center">
       <label for="developer" class="block text-sm font-medium text-gray-700">Filter by Developer</label>
-      <select name="developer_id" id="developer" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+      <select name="developer_id" id="developer" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" onchange="this.form.submit()">
         <option value="">All Developers</option>
         <% developers.forEach(developer => { %>
           <option value="<%= developer.id %>" <%= (selectedDeveloper && selectedDeveloper == developer.id) ? 'selected' : '' %>><%= developer.name %></option>
         <% }) %>
       </select>
-    </div>
-
-    <!-- Submit button -->
-    <div class="flex items-center">
-      <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-700 transition-all duration-200">Filter</button>
     </div>
   </form>
 </div>
