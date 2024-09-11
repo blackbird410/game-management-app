@@ -77,7 +77,7 @@ const addDeveloperPost = [
 
     try {
       await addDeveloper(developer);
-      res.redirect('/developers');
+      res.redirect('/admin/devs');
     } catch (error) {
       console.error('Error adding developer:', error);
       res.status(500).send('Internal Server Error');
