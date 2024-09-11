@@ -27,12 +27,24 @@
     <ul>
       <li><a href="/home">Home</a></li>
       <li><a href="/profile">Profile</a></li>
-      <li><a href="/admin">Admin Dashboard</a></li>
+
+        <% if (user && user.is_admin) { %>
+          <li><a href="/admin">Admin Dashboard</a></li>
+        <% } %>
+
+        <% if (user && !user.is_admin) { %>
+          <li><a href="/purchases">Purchase History</a></li>
+        <% } %>
+
+        <% if (!user) { %>
+          <li><a href="/register">Sign Up</a></li>
+          <li><a href="/login">Login</a></li>
+        <% } else { %>
+          <li><a href="/logout">Logout</a></li>
+        <% } %>
+
+
       <!-- Add more links as needed -->
-      <li><a href="/purchases">Purchase History</a></li>
-      <li><a href="/register">Sign Up</a></li>
-      <li><a href="/login">Login</a></li>
-      <li><a href="/logout">Logout</a></li>
     </ul>
   </div>
   <div class="content" id="content">

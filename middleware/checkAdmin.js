@@ -21,7 +21,21 @@ const isAdmin = (req) => {
   return isAdmin;
 }
 
+const getUserData = (req) => {
+  let user = null;
+
+  if (req.cookies) {
+    const token = req.cookies.token || req.headers['authorization']?.split(' ')[1];
+    if (token) {
+      user = verifyToken(token);
+    }
+  }
+
+  return user;
+};
+
 module.exports = {
   checkAdmin,
-  isAdmin
+  isAdmin,
+  getUserData
 };

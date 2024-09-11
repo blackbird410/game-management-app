@@ -18,7 +18,6 @@ const {
   getUserById,
   addUser,
   updateUserById,
-  getUserCount,
 } = require('../models/user');
 
 const { getUserPurchaseHistory } = require('../models/purchase_history');
@@ -35,7 +34,7 @@ const {
 const renderIndex = asyncHandler(async (req, res, next) => {
   const users = await getAllUsers();
 
-  res.render('users', { users });
+  res.render('users', { users, user: req.user });
 });
 
 const renderProfile = async (req, res) => {
@@ -69,7 +68,7 @@ const renderPurchaseHistory = async(req, res, next) => {
       updatedPurchases.push({ ...purchase, game });
     }
 
-    res.render('purchase_history', { purchases: updatedPurchases });
+    res.render('purchase_history', { purchases: updatedPurchases, user });
   } catch (error) {
     console.error('Error fetching user purchase history:', error);
     res.status(500).send('Internal Server Error');
@@ -84,12 +83,15 @@ const renderAdminDashboard = asyncHandler(async (req, res, next) => {
   res.render('admin_dashboard', {
     developersCount: developers.length, 
     usersCount: users.length,
-    gamesCount: games.length
+    gamesCount: games.length,
+    user: req.user
   });
 });
 
 const registerGet = asyncHandler(async (req, res, next) => {
-  res.render('register', { errors: null });
+  if (req.user) return res.redirect('/');
+
+  res.render('register', { errors: null, user: null });
 });
 
 const registerPost = [
@@ -111,6 +113,7 @@ const registerPost = [
         errors: errors.array(),
         name: req.body.name,
         email: req.body.email,
+        user: null
       });
     }
 
@@ -120,6 +123,7 @@ const registerPost = [
         errors: [{ msg: 'Email is already in use' }],
         name: req.body.name,
         email: req.body.email,
+        user: null
       });
     }
 
@@ -153,7 +157,9 @@ const registerPost = [
 ];
 
 const loginGet = asyncHandler(async (req, res, next) => {
-  res.render('login', { errors: null });
+  if (req.user) return res.redirect('/');
+
+  res.render('login', { errors: null, user: null });
 });
 
 const loginPost = [
@@ -176,6 +182,7 @@ const loginPost = [
         return res.status(401).render('login', { 
           errors: [{ msg: 'Invalid email or password' }],
           email: req.body.email,
+          user: null
         });
       }
 
@@ -196,7 +203,7 @@ const logout = asyncHandler(async (req, res, next) => {
 
 
 const addAdminGet = asyncHandler(async (req, res, next) => {
-  res.render('add_admin', { errors: null });
+  res.render('add_admin', { errors: null, user: null });
 });
 
 const addAdminPost = [
@@ -227,6 +234,7 @@ const addAdminPost = [
         errors: [{ msg: 'Email is already in use' }],
         name: req.body.name,
         email: req.body.email,
+        user: req.user
       });
     }
 

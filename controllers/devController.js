@@ -22,16 +22,17 @@ const upload = multer({ storage });
 
 // Render the index page with developers data
 const renderIndex = asyncHandler(async (req, res, next) => {
-    const developers = await getAllDevelopers();
+  const developers = await getAllDevelopers();
 
-    for (const developer of developers) {
-      developer.image_url = getImageSignedUrl(developer.image_key);
-    }
+  for (const developer of developers) {
+    developer.image_url = getImageSignedUrl(developer.image_key);
+  }
 
-    res.render('developers', {
-      title: "Developer Collection",
-      developers: developers
-    });
+  res.render('developers', {
+    title: "Developer Collection",
+    developers: developers,
+    user: req.user
+  });
 });
 
 // Render the page for adding a new developer
@@ -40,6 +41,7 @@ const addDeveloperGet = async (req, res) => {
     title: 'Add New Developer', 
     developer: null,
     errors: null,
+    user: req.user
   })
 };
 
@@ -53,7 +55,8 @@ const addDeveloperPost = [
     if (!errors.isEmpty()) {
       return res.status(400).render('form_developer', { 
         errors: errors.array(),
-        developer: req.body
+        developer: req.body,
+        user: req.user
       });
     }
 
@@ -91,7 +94,8 @@ const editDeveloperGet = async (req, res) => {
     res.render('form_developer', { 
       title: 'Edit Developer',
       developer: developer,
-      errors: null
+      errors: null,
+      user: req.user
     });
   } catch (error) {
     console.error('Error fetching developer for edit:', error);
@@ -109,7 +113,8 @@ const editDeveloperPost = [
     if (!errors.isEmpty()) {
       return res.status(400).render('form_developer', { 
         errors: errors.array(),
-        developer: req.body
+        developer: req.body,
+        user: req.user
       });
     }
 
@@ -149,7 +154,8 @@ const deleteDeveloperGet = async (req, res) => {
 
     res.render('delete_developer', { 
       title: 'Delete Developer',
-      developer: developer
+      developer: developer,
+      user: req.user
     });
   } catch (error) {
     console.error('Error fetching developer for delete:', error);
