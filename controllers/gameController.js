@@ -28,33 +28,7 @@ const {
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Render the index page with games data
-const renderIndex = async (req, res) => {
-  try {
-    const games = await getAllGames();
-    const genres = await getAllGenres();
-    const developers = await getAllDevelopers();
-
-    for (const game of games) {
-      game.image_url = getImageSignedUrl(game.image_key);
-    }
-
-    res.render('game_collection', {
-      title: "Game Collection",
-      games: games,
-      genres: genres,
-      developers: developers,
-      selectedGenre: null,
-      selectedDeveloper: null,
-      is_admin: isAdmin(req)
-    });
-  } catch (error) {
-    console.error('Error fetching games:', error);
-    res.status(500).send('Internal Server Error');
-  }
-};
-
-const renderFilteredIndex = asyncHandler(async (req, res) => {
+const renderIndex = asyncHandler(async (req, res) => {
   const { genre_id, developer_id } = req.body;
 
   let games;
@@ -287,7 +261,6 @@ const addToCartPost = async (req, res) => {
 
 module.exports = { 
   renderIndex, 
-  renderFilteredIndex,
   renderGames,
   addGameGet,
   addGamePost,
