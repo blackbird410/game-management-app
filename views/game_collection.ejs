@@ -2,6 +2,39 @@
 <h1 class="text-4xl font-bold text-center mb-4">Game Collection</h1>
 <p class="text-center text-gray-600 mb-4">Browse and manage your game collection with ease.</p>
 
+<div>
+  <!-- Filter bar -->
+  <form action="/games/filter" method="POST" class="flex gap-4 items-center justify-center">
+    <!-- Genre filter selector -->
+    <div class="flex flex-col justify-center">
+      <label for="genre" class="block text-sm font-medium text-gray-700">Filter by Genre</label>
+      <select name="genre_id" id="genre" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        <option value="">All Genres</option>
+        <% genres.forEach(genre => { %>
+          <option value="<%= genre.id %>" <%= (selectedGenre && selectedGenre == genre.id) ? 'selected' : '' %>><%= genre.name %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <!-- Developer filter selector -->
+    <div class="flex flex-col justify-center">
+      <label for="developer" class="block text-sm font-medium text-gray-700">Filter by Developer</label>
+      <select name="developer_id" id="developer" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        <option value="">All Developers</option>
+        <% developers.forEach(developer => { %>
+          <option value="<%= developer.id %>" <%= (selectedDeveloper && selectedDeveloper == developer.id) ? 'selected' : '' %>><%= developer.name %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <!-- Submit button -->
+    <div class="flex items-center">
+      <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-700 transition-all duration-200">Filter</button>
+    </div>
+  </form>
+</div>
+
+
 <main>
   <div class="grid gap-6 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
     <% games.forEach(game => { %>
@@ -12,8 +45,8 @@
         <div class="p-6 flex-grow">
           <h2 class="text-xl font-semibold mb-2"><%= game.title %></h2>
           <p class="text-gray-600 mb-4"><strong>Release Date:</strong> <%= game.release_date %></p>
-          <p class="text-gray-600 mb-4"><strong>Genre:</strong> <%= genres.find(genre => genre.id === game.genre_id).name %></p>
-          <p class="text-gray-600 mb-4"><strong>Developer:</strong> <%= developers.find(developer => developer.id === game.developer_id).name %></p>
+          <p class="text-gray-600 mb-4"><strong>Genre:</strong> <%= genres.find(genre => genre.id === game.genre_id)?.name || 'Unknown' %></p>
+          <p class="text-gray-600 mb-4"><strong>Developer:</strong> <%= developers.find(dev => dev.id === game.developer_id)?.name || 'Unknown' %></p>
           <p class="text-gray-600 mb-4"><strong>Description:</strong> <%= game.description %></p>
           <p class="text-gray-600 mb-4"><strong>Price:</strong> <%= game.price %></p>
         </div>
@@ -30,5 +63,6 @@
       </div>
     <% }) %>
   </div>
+</main>
 </main>
 

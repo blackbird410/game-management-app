@@ -1,13 +1,16 @@
 
-const { verifyToken } = require('../lib/jwtUtils');
 const multer = require('multer');
 const { body, validationResult } = require('express-validator');
+const asyncHandler = require('express-async-handler');
 const { isAdmin } = require('../middleware/checkAdmin');
 
 const { 
   addGame,
   getAllGames, 
   getGameById,
+  getGamesByGenre,
+  getGamesByDeveloper,
+  getGamesByGenreDeveloper,
   updateGameById,
   deleteGameById,
 } = require('../models/game');
@@ -41,6 +44,8 @@ const renderIndex = async (req, res) => {
       games: games,
       genres: genres,
       developers: developers,
+      selectedGenre: null,
+      selectedDeveloper: null,
       is_admin: isAdmin(req)
     });
   } catch (error) {
@@ -48,6 +53,39 @@ const renderIndex = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
+
+const renderFilteredIndex = asyncHandler(async (req, res) => {
+  const { genre_id, developer_id } = req.body;
+
+  let games;
+
+  if (genre_id && developer_id) {
+    games = await getGamesByGenreDeveloper(genre_id, developer_id);
+  } else if (genre_id) {
+    games = await getGamesByGenre(genre_id);
+  } else if (developer_id) {
+    games = await getGamesByDeveloper(developer_id);
+  } else {
+    games = await getAllGames();
+  }
+
+  for (const game of games) {
+    game.image_url = getImageSignedUrl(game.image_key);
+  }
+
+  const genres = await getAllGenres();
+  const developers = await getAllDevelopers();
+
+  res.render('game_collection', {
+    title: "Game Collection",
+    games: games,
+    genres: genres,
+    developers: developers,
+    selectedGenre: genre_id,
+    selectedDeveloper: developer_id,
+    is_admin: isAdmin(req)
+  });
+});
 
 const renderGames = async (req, res) => {
   try {
@@ -249,6 +287,7 @@ const addToCartPost = async (req, res) => {
 
 module.exports = { 
   renderIndex, 
+  renderFilteredIndex,
   renderGames,
   addGameGet,
   addGamePost,
