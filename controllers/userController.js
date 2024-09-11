@@ -147,6 +147,7 @@ const registerPost = [
     }
 
     try {
+      console.log(user);
       await addUser(user);
       res.redirect('/');
     } catch (error) {
